@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STENSIL - Misi Corak Ajaib</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Fredoka:wght@500;600;700&display=swap');
+:root{--ink:#59456f;--pink:#ff9fc9;--yellow:#ffe58b;--blue:#9ce7f5;--mint:#b9efcf;--lilac:#d8c5ff}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 15% 10%,#fff4c9 0 7%,transparent 7.5%),linear-gradient(135deg,#a9e9f6,#f9cce2 55%,#d9ccff);color:var(--ink);font-family:'Baloo 2',sans-serif;text-align:center}
+header{padding:18px 10px 20px;background:linear-gradient(120deg,#8cddf1,#ffc5df,#ffe7a1);border-bottom:6px solid #fff7e8;box-shadow:0 5px 0 #d8b9d5}
+h1{font-family:'Fredoka','Baloo 2',sans-serif;font-size:clamp(36px,7vw,58px);line-height:1;color:#fff;text-shadow:0 3px 0 #f28ab7,0 6px 0 #a58bd6,0 0 18px #fff;font-weight:700;letter-spacing:2px}
+header p{margin:10px 0 0;color:#76558c;font-size:clamp(17px,3vw,23px);font-weight:800}
+main{max-width:1000px;margin:auto;padding:14px}
+.panel{background:linear-gradient(145deg,#fffdf8,#fff0f7);border:5px solid #fff;border-radius:28px;padding:18px;box-shadow:0 8px 0 #d9b7d6,0 14px 30px #9b7eae33}
+button{border:3px solid #fff;border-radius:22px;background:linear-gradient(180deg,#fff0a9,#ffd66e);color:#70527e;padding:12px 20px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;cursor:pointer;box-shadow:0 5px 0 #e6a9a7;transition:transform .15s,filter .15s}
+button:hover{transform:translateY(-2px);filter:saturate(1.12)}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #e6a9a7}
+button:disabled{opacity:.5;cursor:not-allowed}
+.hidden{display:none!important}
+#hud{display:flex;justify-content:space-around;flex-wrap:wrap;gap:9px;margin-bottom:10px;font-family:'Fredoka',sans-serif;font-size:14px}
+.huditem{background:#fff8e9;color:#795b8e;padding:10px 15px;border:3px solid #fff;border-radius:18px;box-shadow:0 3px 0 #d8b9dc}
+#gameWrap{position:relative;border:7px solid #fff;border-radius:25px;overflow:hidden;background:#b8eff8;box-shadow:0 7px 0 #d6a9d2}
+canvas{display:block;width:100%;height:auto;image-rendering:auto;touch-action:none}
+#menu,#result,#review{margin-top:15px}
+#menu h2,#result h2,#review h2{color:#e77fae;font-family:'Fredoka','Baloo 2',sans-serif;font-size:clamp(25px,4vw,36px);line-height:1.25;text-shadow:0 2px #fff}
+#menu p,#result p,#review p{line-height:1.6;font-size:17px}
+.controls{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:12px}
+.controlgroup{display:flex;gap:10px}
+.controlgroup button{min-width:64px;min-height:57px;font-size:22px}
+#quiz{position:absolute;inset:0;background:#735d83bb;display:flex;align-items:center;justify-content:center;padding:12px;z-index:5}
+.quizbox{width:min(480px,100%);background:linear-gradient(145deg,#fffdf1,#ffeaf4);color:#654e78;border:7px solid #fff;border-radius:28px;padding:18px;box-shadow:0 8px 0 #e5b5c8,0 0 25px #fff9}
+.quizbox h3{font-family:'Fredoka',sans-serif;font-size:22px;line-height:1.3;color:#e17cab}
+#question{font-weight:800;font-size:20px;line-height:1.4}
+.answers{display:grid;gap:9px;margin-top:15px}
+.answers button{text-align:left;background:#fff;border-color:#e6c8e9;box-shadow:0 3px 0 #d8c3e5}
+.answers button:hover{background:#eafaff}
+#feedback{margin-top:13px;font-weight:800;line-height:1.5}
+.reviewitem{text-align:left;margin:12px 0;padding:14px;background:#fff8ec;border:3px solid #f2c9df;border-radius:20px;line-height:1.6}
+.good{color:#329b75}.bad{color:#d96b85}.muted{color:#927da5}
+.reflection{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px}
+.reflection button{font-size:15px}
+textarea{font-family:'Baloo 2',sans-serif;font-size:15px;color:#654e78;border:2px solid #e8c8df}
+footer{padding:20px;color:#866f9a;font-size:14px}
+.sound-toggle{margin-top:10px;background:#dff8f4}
+@media(max-width:550px){main{padding:8px}.huditem{font-size:12px;padding:8px 10px}.controls button{min-width:55px}.quizbox{padding:12px}#question{font-size:17px}}
+</style>
+</head>
+<body>
+<header>
+<h1>STENSIL</h1>
+<p>🌈 Misi Corak Ajaib ✨</p>
+</header>
+<main>
+<section id="menu" class="panel">
+<h2>SELAMAT DATANG!</h2>
+<div style="font-size:55px;margin:12px">🎨 🖌️ 🧽 ✂️</div>
+<p>Hai, adik-adik! Mari sertai pengembaraan seni untuk menguasai teknik stensilan. Kumpulkan bintang, elakkan halangan dan jawab lima soalan misteri!</p>
+<p><b>🎯 Misi kamu:</b> Kenali alat, bahan, proses dan bahasa seni visual dalam teknik stensilan.</p>
+<p>← → Bergerak &nbsp; | &nbsp; SPACE / ↑ Melompat</p>
+<button onclick="startGame()">🌸 MULA BERMAIN 🌸</button>
+    <br><button class="sound-toggle" id="soundToggle" onclick="toggleSound()">🔊 Bunyi: ON</button>
+</section>
+
+<section id="play" class="hidden">
+<div id="hud">
+<div class="huditem">STENSIL</div>
+<div class="huditem">SCORE: <span id="score">000000</span></div>
+<div class="huditem">⭐ <span id="stars">00</span></div>
+<div class="huditem">WORLD 1-1</div>
+<div class="huditem">TIME: <span id="time">120</span></div>
+</div>
+<div id="gameWrap">
+<canvas id="game" width="900" height="440"></canvas>
+<div id="quiz" class="hidden">
+<div class="quizbox">
+<h3 id="quizTitle">MISI SOALAN</h3>
+<div id="question"></div>
+<div class="answers" id="answers"></div>
+<div id="feedback"></div>
+<button id="retry" class="hidden" onclick="retryQuestion()">↻ CUBA LAGI</button>
+<button id="continue" class="hidden" onclick="closeQuiz()">TERUSKAN PENGEMBARAAN ➜</button>
+</div>
+</div>
+</div>
+<div class="controls">
+<div class="controlgroup">
+<button id="left">◀</button><button id="right">▶</button>
+</div>
+<button id="jump">⬆ JUMP</button>
+</div>
+<p class="muted">Kumpulkan ⭐ dan sentuh blok ? untuk menjawab soalan.</p>
+</section>
+
+<section id="result" class="panel hidden">
+<h2>TAHNIAH, WIRA SENI!</h2>
+<div style="font-size:50px">🏆🎨⭐</div>
+<p id="resultText"></p>
+<button onclick="showReview()">📖 JOM IMBAS KEMBALI</button>
+<button onclick="startGame()">↻ MAIN LAGI</button>
+<button onclick="backMenu()">⌂ MENU</button>
+</section>
+
+<section id="review" class="panel hidden">
+<h2>JOM IMBAS KEMBALI!</h2>
+<p>Hebat! Mari kita semak semula ilmu stensilan yang telah dipelajari.</p>
+<div id="reviewList"></div>
+<h3 style="color:#ffdf73">🌟 REFLEKSI KENDIRI</h3>
+<p>1. Apakah perkara baharu yang kamu pelajari?</p>
+<textarea id="reflection1" placeholder="Saya belajar bahawa..." style="width:100%;height:65px;border-radius:8px;padding:10px"></textarea>
+<p>2. Apakah alatan yang digunakan dalam teknik stensilan?</p>
+<textarea id="reflection2" placeholder="Antara alatannya ialah..." style="width:100%;height:65px;border-radius:8px;padding:10px"></textarea>
+<p>3. Bagaimanakah kamu menghasilkan corak stensilan yang kemas?</p>
+<textarea id="reflection3" placeholder="Saya perlu..." style="width:100%;height:65px;border-radius:8px;padding:10px"></textarea>
+<h3 style="color:#ffdf73">Bagaimanakah perasaan kamu?</h3>
+<div class="reflection">
+<button onclick="setFeeling('Saya sudah faham!')">😊 Saya sudah faham!</button>
+<button onclick="setFeeling('Saya masih perlu berlatih.')">🤔 Saya perlu berlatih.</button>
+<button onclick="setFeeling('Saya mahu belajar lagi!')">🌈 Saya mahu belajar lagi!</button>
+</div>
+<p id="feeling"></p>
+<button onclick="backResult()">← KEMBALI KE KEPUTUSAN</button>
+</section>
+</main>
+<footer>STENSIL – Misi Corak Ajaib | Pendidikan Seni Visual Tahun 4</footer>
+
+<script>
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+const W=900,H=440,ground=365;
+let audioCtx=null,musicTimer=null,soundOn=true,musicStep=0;
+function audioReady(){if(!audioCtx){const AC=window.AudioContext||window.webkitAudioContext;if(AC)audioCtx=new AC()}if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume()}
+function tone(freq,duration=.12,type='sine',volume=.045,delay=0){if(!soundOn)return;audioReady();if(!audioCtx)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.setValueAtTime(freq,audioCtx.currentTime+delay);g.gain.setValueAtTime(.0001,audioCtx.currentTime+delay);g.gain.exponentialRampToValueAtTime(volume,audioCtx.currentTime+delay+.015);g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+delay+duration);o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+delay);o.stop(audioCtx.currentTime+delay+duration+.03)}
+function sfx(kind){if(!soundOn)return;const patterns={jump:[[520,.08],[700,.09]],star:[[880,.09],[1175,.13],[1480,.16]],correct:[[660,.1],[880,.1],[1100,.2]],wrong:[[260,.16],[220,.2]],finish:[[523,.12],[659,.12],[784,.12],[1046,.3]],click:[[700,.07]]};(patterns[kind]||patterns.click).forEach((n,i)=>tone(n[0],n[1],'sine',.045,i*.09))}
+function startMusic(){if(!soundOn||musicTimer)return;audioReady();const melody=[523,659,784,659,587,698,880,698,523,659,784,1046,880,784,659,587];musicTimer=setInterval(()=>{if(soundOn&&!paused&&!ended){tone(melody[musicStep%melody.length],.19,'triangle',.018);if(musicStep%4===0)tone(262,.25,'sine',.012);musicStep++}},260)}
+function stopMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}}
+function toggleSound(){soundOn=!soundOn;const b=$('soundToggle');if(b)b.textContent=soundOn?'🔊 Bunyi: ON':'🔇 Bunyi: OFF';if(soundOn){audioReady();startMusic()}else stopMusic()}
+function chibi(x,y,scale=1,variant=0){
+  ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+  const hair=['#59456f','#7b5a9d','#b65f83','#4f7896'][variant%4],shirt=['#ff9fc9','#9ce7f5','#b9efcf','#d8c5ff'][variant%4];
+  // tiny legs and shoes
+  ctx.fillStyle='#765b82';ctx.fillRect(-10,24,7,13);ctx.fillRect(4,24,7,13);
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-7,38,7,4,0,0,Math.PI*2);ctx.ellipse(8,38,7,4,0,0,Math.PI*2);ctx.fill();
+  // body
+  ctx.fillStyle=shirt;ctx.beginPath();ctx.roundRect(-16,7,32,23,10);ctx.fill();
+  // face
+  ctx.fillStyle='#ffe0bd';ctx.beginPath();ctx.ellipse(0,-8,22,23,0,0,Math.PI*2);ctx.fill();
+  // hair cap and fringe
+  ctx.fillStyle=hair;ctx.beginPath();ctx.arc(0,-13,23,Math.PI,Math.PI*2);ctx.lineTo(21,-4);ctx.quadraticCurveTo(9,-12,0,-4);ctx.quadraticCurveTo(-10,-14,-21,-2);ctx.closePath();ctx.fill();
+  // eyes, blush and smile
+  ctx.fillStyle='#493b55';ctx.beginPath();ctx.ellipse(-8,-7,2.5,4,0,0,Math.PI*2);ctx.ellipse(8,-7,2.5,4,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#f59bb4';ctx.beginPath();ctx.ellipse(-14,1,4,2.5,0,0,Math.PI*2);ctx.ellipse(14,1,4,2.5,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#9b6174';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(0,0,5,.15,Math.PI-.15);ctx.stroke();
+  // little hair bow
+  ctx.fillStyle='#ffe58b';ctx.beginPath();ctx.arc(16,-24,5,0,Math.PI*2);ctx.arc(24,-25,4,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+}
+const questions=[
+{q:"Apakah maksud teknik stensilan dalam Pendidikan Seni Visual?",a:["Menghasilkan corak menggunakan acuan berlubang.","Menghasilkan gambar menggunakan tanah liat.","Menghasilkan arca menggunakan kertas.","Menghasilkan lukisan menggunakan pensel sahaja."],correct:0,why:"Stensilan menggunakan acuan berlubang. Warna disapu pada bahagian terbuka untuk menghasilkan corak.",hint:"Fikirkan tentang acuan yang mempunyai bahagian terbuka.",fact:"Acuan stensil membantu menghasilkan corak yang berulang."},
+{q:"Antara berikut, yang manakah digunakan untuk mengaplikasikan warna dalam teknik stensilan?",a:["Pembaris dan pemadam.","Span dan berus.","Gam dan tali.","Tanah liat dan lidi."],correct:1,why:"Span dan berus boleh digunakan untuk menyapu atau menepuk warna pada permukaan acuan.",hint:"Alat ini membantu menyapu warna.",fact:"Gunakan warna secara terkawal supaya corak lebih kemas."},
+{q:"Apakah langkah pertama dalam menghasilkan karya stensilan?",a:["Mengaplikasikan warna.","Menghasilkan kemasan akhir.","Melakar motif pada bahan acuan.","Menampal hasil karya."],correct:2,why:"Murid perlu merancang dan melakar motif terlebih dahulu sebelum menyediakan acuan stensil.",hint:"Sebelum memotong acuan, kita perlu merancang corak.",fact:"Lakaran membantu menentukan rupa dan susunan motif."},
+{q:"Apakah unsur seni yang dapat dilihat melalui penggunaan bentuk atau imej pada corak stensilan?",a:["Rupa.","Ruang.","Jalinan.","Bentuk."],correct:0,why:"Rupa ialah unsur seni yang membentuk imej atau motif pada corak stensilan.",hint:"Unsur seni ini merujuk kepada imej atau bentuk dua dimensi.",fact:"Rupa geometri dan organik boleh dijadikan motif stensilan."},
+{q:"Mengapakah warna perlu diaplikasikan dengan cermat menggunakan span atau berus pada acuan stensil?",a:["Supaya warna merebak ke seluruh permukaan.","Supaya corak menjadi kabur.","Supaya warna tidak terkena langsung pada kertas.","Supaya corak kelihatan kemas dan jelas."],correct:3,why:"Sapuan warna yang terkawal membantu menghasilkan corak yang jelas dan tidak comot.",hint:"Fikirkan hasil corak yang ingin kita lihat.",fact:"Jangan gunakan terlalu banyak warna pada span atau berus."}
+];
+let player,score,stars,worldX,blocks,items,hazards,answersLog,activeQ,paused,ended,remaining,invul,keys={},last=0,frame=0;
+const $=id=>document.getElementById(id);
+function startGame(){
+['menu','result','review'].forEach(x=>$(x).classList.add('hidden'));
+$('play').classList.remove('hidden');
+score=0;stars=0;worldX=0;remaining=120;invul=0;paused=false;ended=false;activeQ=-1;frame=0;
+answersLog=questions.map(()=>({chosen:null,correct:false,seen:false}));
+player={x:65,y:270,vx:0,vy:0,w:25,h:35,on:false};
+blocks=[260,520,800,1120,1470].map((x,i)=>({x,y:[245,180,260,165,235][i],used:false,i}));
+items=Array.from({length:35},(_,i)=>({x:145+i*52,y:220+Math.sin(i*1.7)*85,got:false}));
+hazards=[{x:390,y:335,w:35,h:30,type:'🧽',axis:1},{x:680,y:330,w:40,h:35,type:'🖌️',axis:0},{x:970,y:330,w:35,h:35,type:'🎨',axis:1},{x:1300,y:310,w:40,h:45,type:'🧽',axis:0},{x:1570,y:330,w:40,h:35,type:'🖌️',axis:1}];
+updateHUD();last=performance.now();requestAnimationFrame(loop);
+}
+function updateHUD(){$('score').textContent=String(score).padStart(6,'0');$('stars').textContent=String(stars).padStart(2,'0');$('time').textContent=remaining}
+function drawBlock(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h);ctx.strokeStyle='#283452';ctx.lineWidth=3;ctx.strokeRect(x,y,w,h)}
+function draw(){
+ ctx.clearRect(0,0,W,H);
+ // pastel sky and soft clouds
+ let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#8fe1f5');g.addColorStop(.68,'#d7f5fa');g.addColorStop(1,'#fff0d7');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ for(let i=0;i<8;i++){let x=((i*155-worldX*.16)%1050+1050)%1050-60,y=48+(i%3)*27;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,y,22,0,Math.PI*2);ctx.arc(x+23,y-8,27,0,Math.PI*2);ctx.arc(x+48,y,20,0,Math.PI*2);ctx.fill()}
+ // distant whimsical houses
+ for(let i=0;i<8;i++){let x=((i*145-worldX*.34)%1100+1100)%1100-80,y=170+(i%3)*17;ctx.fillStyle=['#ffcae0','#ffe49b','#c8e9cf','#d7caff'][i%4];ctx.fillRect(x,y,75,105);ctx.fillStyle='#fff5ec';ctx.beginPath();ctx.moveTo(x-8,y);ctx.lineTo(x+37,y-37);ctx.lineTo(x+83,y);ctx.fill();ctx.fillStyle='#8ab9ce';ctx.fillRect(x+12,y+22,17,23);ctx.fillRect(x+46,y+22,17,23);ctx.fillStyle='#b77b93';ctx.fillRect(x+30,y+66,19,39)}
+ // ground and flower patches
+ ctx.fillStyle='#a9e5b9';ctx.fillRect(0,ground,W,H-ground);
+ ctx.fillStyle='#7bc995';ctx.fillRect(0,ground+12,W,H-ground);
+ for(let i=0;i<28;i++){let x=(i*43-worldX*.9)%950;if(x<0)x+=950;ctx.fillStyle=['#ff9fc9','#ffe58b','#fff','#c7b4ff'][i%4];ctx.beginPath();ctx.arc(x,ground-5-(i%3)*8,4,0,Math.PI*2);ctx.fill()}
+ // stepping platforms with candy-like trim
+ for(let x of [200,430,690,940,1190,1460,1710]){let sx=x-worldX;if(sx>-70&&sx<W+20){ctx.fillStyle='#8bd6ad';ctx.beginPath();ctx.roundRect(sx,ground-95,75,18,8);ctx.fill();ctx.fillStyle='#ffb9d7';ctx.beginPath();ctx.roundRect(sx+20,ground-112,20,17,6);ctx.fill()}}
+ // question blocks, stars and friendly hazards
+ for(let b of blocks){let sx=b.x-worldX;if(sx>-60&&sx<W+60){ctx.fillStyle=b.used?'#d6c3a8':'#ffcf68';ctx.beginPath();ctx.roundRect(sx,b.y,38,38,9);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#a36d8e';ctx.font='bold 27px Fredoka';ctx.fillText(b.used?'✓':'?',sx+11,b.y+28)}}
+ for(let it of items){let sx=it.x-worldX;if(!it.got&&sx>-20&&sx<W+20){ctx.font='23px serif';ctx.fillText('⭐',sx,it.y)}}
+ hazards.forEach((h,i)=>{let sx=h.x-worldX;if(sx>-60&&sx<W+50){ctx.font='34px serif';ctx.fillText(h.type,sx,h.y+10)}});
+ // finish flag
+ let fx=1820-worldX;if(fx>-30&&fx<W+30){ctx.fillStyle='#8d78b8';ctx.fillRect(fx,ground-115,7,115);ctx.fillStyle='#ff9fc9';ctx.beginPath();ctx.moveTo(fx+7,ground-112);ctx.lineTo(fx+68,ground-96);ctx.lineTo(fx+7,ground-78);ctx.fill();ctx.fillStyle='#fff';ctx.font='bold 14px Fredoka';ctx.fillText('TAMAT!',fx+10,ground-91)}
+ // original chibi player and little sparkle
+ if(!(invul>0&&Math.floor(frame/5)%2)){chibi(player.x+player.w/2,player.y+player.h-5,.88,0);ctx.fillStyle='#fff4a8';ctx.font='16px serif';ctx.fillText('✦',player.x+25,player.y+5)}
+}
+function loop(t){
+if(ended||$('play').classList.contains('hidden'))return;
+let dt=Math.min((t-last)/16.67,2);last=t;frame++;
+if(!paused){
+remaining=Math.max(0,remaining-dt/60);if(remaining<=0){finish();return}
+let speed=3.2;player.vx=0;if(keys.ArrowLeft||keys.a)player.vx=-speed;if(keys.ArrowRight||keys.d)player.vx=speed;
+player.x+=player.vx*dt;player.x=Math.max(0,Math.min(W-player.w,player.x));
+player.vy+=.42*dt;player.y+=player.vy*dt;
+player.on=false;
+if(player.y+player.h>=ground){player.y=ground-player.h;player.vy=0;player.on=true}
+for(let x of [200,430,690,940,1190,1460,1710]){let sx=x-worldX;if(player.x+player.w>sx&&player.x<sx+75&&player.y+player.h>=ground-95&&player.y+player.h<=ground-75&&player.vy>=0){player.y=ground-95-player.h;player.vy=0;player.on=true}}
+worldX=Math.max(0,Math.min(1220,worldX+(player.x>W*.67?player.x-W*.67:player.x<W*.2?player.x-W*.2:0)));
+if(player.x>W*.67)player.x=W*.67;if(player.x<W*.2&&worldX>0)player.x=W*.2;
+blocks.forEach(b=>{if(!b.used&&player.x+worldX+player.w>b.x&&player.x+worldX<b.x+38&&Math.abs((player.y)-b.y)<30){openQuiz(b.i)}});
+items.forEach(it=>{if(!it.got&&Math.abs(player.x+worldX-it.x)<25&&Math.abs(player.y-it.y)<30){it.got=true;stars++;score+=100;updateHUD();sfx('star')}});
+hazards.forEach((h,i)=>{let hy=h.axis?h.y+Math.sin(frame*.045+i)*12:h.y;let hx=h.x-worldX;if(player.x+player.w>hx&&player.x<hx+h.w&&player.y+player.h>hy&&player.y<hy+h.h&&invul<=0){score=Math.max(0,score-100);invul=90;player.vy=-4;updateHUD()}});
+if(invul>0)invul-=dt;
+updateHUD();
+if(player.x+worldX>=1800){finish();return}
+}
+draw();requestAnimationFrame(loop);
+}
+function jump(){if(!paused&&!ended&&player.on){player.vy=-9.5;player.on=false;sfx('jump')}}
+function openQuiz(i){paused=true;activeQ=i;tone(740,.12,'sine',.025);let q=questions[i];answersLog[i].seen=true;$('quiz').classList.remove('hidden');$('quizTitle').textContent='MISI SOALAN '+(i+1);$('question').textContent=q.q;$('feedback').textContent='';$('retry').classList.add('hidden');$('continue').classList.add('hidden');$('answers').innerHTML='';
+q.a.forEach((a,j)=>{let b=document.createElement('button');b.textContent=String.fromCharCode(65+j)+'. '+a;b.onclick=()=>answer(j);$('answers').appendChild(b)})}
+function answer(j){
+let q=questions[activeQ],log=answersLog[activeQ];log.chosen=j;
+if(j===q.correct){
+if(!log.correct){log.correct=true;score+=1000;stars+=10;blocks[activeQ].used=true;updateHUD()}
+$('feedback').innerHTML='<span class="good">🌟 HEBAT! JAWAPAN BETUL!</span><br>'+q.why+'<br><b>💡 Tahukah kamu?</b> '+q.fact;
+$('answers').innerHTML='';$('continue').classList.remove('hidden');$('retry').classList.add('hidden');
+}else{
+$('feedback').innerHTML='<span class="bad">Cuba fikir semula!</span><br>💡 Petunjuk: '+q.hint;
+$('retry').classList.remove('hidden');
+}
+}
+function retryQuestion(){openQuiz(activeQ)}
+function closeQuiz(){$('quiz').classList.add('hidden');paused=false}
+function finish(){
+ended=true;paused=true;$('play').classList.add('hidden');$('result').classList.remove('hidden');
+let correct=answersLog.filter(a=>a.correct).length;
+$('resultText').innerHTML='Jumlah skor: <b>'+score+'</b><br>Jumlah bintang: ⭐ '+stars+'<br>Soalan dijawab dengan betul: <b>'+correct+' daripada 5</b><br><br>'+(correct===5?'Cemerlang! Kamu pakar seni stensilan!':correct>=3?'Bagus! Teruskan berlatih!':'Teruskan belajar. Kamu pasti boleh!');}
+function showReview(){
+$('result').classList.add('hidden');$('review').classList.remove('hidden');let html='';
+questions.forEach((q,i)=>{let l=answersLog[i];let status=!l.seen?'Belum diterokai':l.correct?'Betul':'Perlu diperbaiki';html+='<div class="reviewitem"><b>Soalan '+(i+1)+': '+q.q+'</b><br>Jawapan kamu: '+(l.chosen===null?'Belum dijawab':String.fromCharCode(65+l.chosen)+'. '+q.a[l.chosen])+'<br>Jawapan betul: '+String.fromCharCode(65+q.correct)+'. '+q.a[q.correct]+'<br><b class="'+(l.correct?'good':'bad')+'">'+status+'</b><br><span class="muted">'+q.why+'</span></div>'});
+$('reviewList').innerHTML=html;
+}
+function setFeeling(v){$('feeling').textContent='Pilihan kamu: '+v}
+function backResult(){$('review').classList.add('hidden');$('result').classList.remove('hidden')}
+function backMenu(){stopMusic();$('result').classList.add('hidden');$('review').classList.add('hidden');$('menu').classList.remove('hidden')}
+document.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp',' '].includes(e.key))e.preventDefault();keys[e.key]=true;if(e.key===' '||e.key==='ArrowUp')jump();if(e.key==='Enter'&&!$('quiz').classList.contains('hidden')&&$('continue').classList.contains('hidden'))retryQuestion()});
+document.addEventListener('keyup',e=>keys[e.key]=false);
+function bindHold(id,key){let b=$(id);b.addEventListener('pointerdown',e=>{e.preventDefault();keys[key]=true});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>keys[key]=false))}
+bindHold('left','ArrowLeft');bindHold('right','ArrowRight');
+$('jump').addEventListener('pointerdown',e=>{e.preventDefault();jump()});
+</script>
+</body>
+</html>
